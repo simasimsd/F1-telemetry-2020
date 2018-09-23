@@ -1,5 +1,5 @@
 import socket
-from f1_2018_struct import *
+from server.f1_2018_struct import *
 
 UDP_IP = "127.0.0.1"
 UDP_PORT = 20777
@@ -41,7 +41,3 @@ def get_telemetry():
         elif int(header.m_packetId) == 7:
             pld = PacketCarStatusData.from_buffer_copy(data[21:1061])
         yield pld
-
-
-for packet in get_telemetry():
-    print(packet)
