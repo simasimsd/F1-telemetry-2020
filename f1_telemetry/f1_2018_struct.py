@@ -55,6 +55,7 @@ class PacketMotionData(ctypes.LittleEndianStructure):
     """
     _pack_ = 1
     _fields_ = [
+        ('header', Header),                                # Header
         ('cars_motion_data', CarMotionData * 20),          # Data for all cars on track
         ('m_suspensionPosition', ctypes.c_float * 4),      # Note: All wheel arrays have the following order:
         ('m_suspensionVelocity', ctypes.c_float * 4),      # RL, RR, FL, FR
@@ -95,6 +96,7 @@ class PacketSessionData(ctypes.LittleEndianStructure):
     """
     _pack_ = 1
     _fields_ = [
+        ('header', Header),                         # Header
         ('m_weather', ctypes.c_ubyte),              # Weather - 0 = clear, 1 = light cloud, 2 = overcast
                                                     # 3 = light rain, 4 = heavy rain, 5 = storm
         ('m_trackTemperature', ctypes.c_byte),      # Track temp. in degrees celsius
@@ -157,6 +159,7 @@ class PacketLapData(ctypes.LittleEndianStructure):
     """
     _pack_ = 1
     _fields_ = [
+        ('header', Header),          # Header
         ('laps_data', LapData * 20)  # Lap data for all cars on track
     ]
 
@@ -169,6 +172,7 @@ class PacketEventData(ctypes.LittleEndianStructure):
     """
     _pack_ = 1
     _fields_ = [
+        ('header', Header),                        # Header
         ('m_eventStringCode', ctypes.c_char * 4),  # Event string code: "SSTA" = Sent when the session starts,
                                                    # "SEND" = Sent when the session ends
     ]
@@ -201,6 +205,7 @@ class PacketParticipantsData(ctypes.LittleEndianStructure):
     """
     _pack_ = 1
     _fields_ = [
+        ('header', Header),                           # Header
         ('m_numCars', ctypes.c_ubyte),                # Number of cars in the data
         ('participants_data', ParticipantData * 20),
     ]
@@ -244,6 +249,7 @@ class PacketCarSetupData(ctypes.LittleEndianStructure):
     """
     _pack_ = 1
     _fields_ = [
+        ('header', Header),  # Header
         ('m_numCars', ctypes.c_ubyte),
         ('cars_setup_data', CarSetupData * 20),
     ]
@@ -281,6 +287,7 @@ class PacketCarTelemetryData(ctypes.LittleEndianStructure):
     """
     _pack_ = 1
     _fields_ = [
+        ('header', Header),                              # Header
         ('cars_telemetry_data', CarTelemetryData * 20),
         ('m_buttonStatus', ctypes.c_uint)                # Bit flags specifying which buttons are being pressed
                                                          # currently - see appendices
