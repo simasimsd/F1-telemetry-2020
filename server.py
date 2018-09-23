@@ -9,7 +9,7 @@ def get_telemetry():
     """
     Generator function which yields UDPPackets from the specified ip address and port
 
-    :yield: A dict with all info send by F1 2018
+    :yield: A a packet send by F1 2018
     """
     sock = socket.socket(socket.AF_INET,
                          socket.SOCK_DGRAM)
