@@ -4,7 +4,7 @@ import csv
 def getdict(struct):
     '''
     Translates a ctype.structure into a dictionary.
-    To be ohnest, copied from stackoverflow.
+    To be ohnest, copied from stackoverflow, but it has some changes.
     '''
     result = {}
     for field, _ in struct._fields_:
@@ -19,6 +19,12 @@ def getdict(struct):
         elif hasattr(value, "_fields_"):
             # Probably another struct
             value = getdict(value)
+        elif type(value) in (list, tuple):
+            # A list or a tuple of other structures
+            value_ = []
+            for elem in value:
+                value_.extend(getdict(elem))
+            value = value_
         result[field] = value
     return result
 
@@ -39,7 +45,13 @@ def getlist(struct):
             value = list(value)
         elif hasattr(value, "_fields_"):
             # Probably another struct
-            value = getdict(value)
+            value = getlist(value)
+        elif type(value) in (list, tuple):
+            # A list or a tuple of other structures
+            value_ = []
+            for elem in value:
+                value_.extend(getlist(elem))
+            value = value_
         result.append(value)
     return result
 
