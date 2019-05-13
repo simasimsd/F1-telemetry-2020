@@ -1,5 +1,4 @@
 import csv
-from server import get_telemetry
 
 
 def getdict(struct):
