@@ -39,7 +39,7 @@ def getlist(struct):
         # if the type is not a primitive and it evaluates to False ...
         if (type(value) not in [int, float, bool]) and not bool(value):
             # it's a null pointer
-            value = None
+            value = [None]
         elif hasattr(value, "_length_") and hasattr(value, "_type_"):
             # Probably an array
             value = list(value)
@@ -52,8 +52,6 @@ def getlist(struct):
             for elem in value:
                 value_.extend(getlist(elem))
             value = value_
-        if type(value) is not list:
-            value = list(value)
         result.extend(value)
     return result
 
