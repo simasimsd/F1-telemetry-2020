@@ -34,7 +34,7 @@ def getlist(struct):
     result = []
     #print struct
     def get_value(value):
-         if (type(value) not in [int, long, float, bool]) and not bool(value):
+         if (type(value) not in [int, float, bool]) and not bool(value):
              # it's a null pointer
              value = None
          elif hasattr(value, "_length_") and hasattr(value, "_type_"):
