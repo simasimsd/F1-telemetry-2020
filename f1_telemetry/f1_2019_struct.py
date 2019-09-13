@@ -118,7 +118,7 @@ class PacketSessionData(ctypes.LittleEndianStructure):
         ('m_spectatorCarIndex', ctypes.c_uint8),    # Index of the car being spectated
         ('m_sliProNativeSupport', ctypes.c_uint8),  # SLI Pro support, 0 = inactive, 1 = active
         ('m_numMarshalZones', ctypes.c_uint8),      # Number of marshal zones to follow
-        ('m_marshalZones', MarshalZone * 21),       # List of marshal zones – max 21List of marshal zones – max 21
+        ('m_marshalZones', MarshalZone * 21),       # List of marshal zones - max 21List of marshal zones - max 21
         ('m_safetyCarStatus', ctypes.c_uint8),      # 0 = no safety car, 1 = full safety car, 2 = virtual safety car
         ('m_networkGame', ctypes.c_uint8),          # 0 = offline, 1 = online
     ]
@@ -137,10 +137,10 @@ class LapData(ctypes.LittleEndianStructure):
         ('m_bestLapTime', ctypes.c_float),        # Best lap time of the session in seconds
         ('m_sector1Time', ctypes.c_float),        # Sector 1 time in seconds
         ('m_sector2Time', ctypes.c_float),        # Sector 2 time in seconds
-        ('m_lapDistance', ctypes.c_float),        # Distance vehicle is around current lap in metres – could
-                                                  # be negative if line hasn’t been crossed yet
-        ('m_totalDistance', ctypes.c_float),      # Total distance travelled in session in metres – could
-                                                  # be negative if line hasn’t been crossed yet
+        ('m_lapDistance', ctypes.c_float),        # Distance vehicle is around current lap in metres - could
+                                                  # be negative if line hasn't been crossed yet
+        ('m_totalDistance', ctypes.c_float),      # Total distance travelled in session in metres - could
+                                                  # be negative if line hasn't been crossed yet
         ('m_safetyCarDelta', ctypes.c_float),     # Delta in seconds for safety car
         ('m_carPosition', ctypes.c_uint8),        # Car race position
         ('m_currentLapNum', ctypes.c_uint8),      # Current lap number
@@ -166,16 +166,16 @@ class PacketLapData(ctypes.LittleEndianStructure):
         ('m_lapsData', LapData * 20)  # Lap data for all cars on track
     ]
 
-#class EventDataDetails(ctypes.LittleEndianStructure):
-#    """
-#    This packet gives details of events that happen during the course of a session.
+class EventDataDetails(ctypes.LittleEndianStructure):
+    """
+    This packet gives details of events that happen during the course of a session.
 
-#    Frequency: When the event occurs
-#    """
-#    _pack_ = 1
-#    _fields_ = [
+    Frequency: When the event occurs
+    """
+    _pack_ = 1
+    _fields_ = [
 
-#    ]
+    ]
 
 
 class PacketEventData(ctypes.LittleEndianStructure):
@@ -208,8 +208,8 @@ class ParticipantData(ctypes.LittleEndianStructure):
         ('m_teamId', ctypes.c_uint8),        # Team id - see appendix
         ('m_raceNumber', ctypes.c_uint8),    # Race number of the car
         ('m_nationality', ctypes.c_uint8),   # Nationality of the driver
-        ('m_name', ctypes.c_char * 48),      # Name of participant in UTF-8 format – null terminated
-                                             # Will be truncated with … (U+2026) if too long
+        ('m_name', ctypes.c_char * 48),      # Name of participant in UTF-8 format - null terminated
+                                             # Will be truncated with (U+2026) if too long
         ('m_yourTelemetry', ctypes.c_uint8)  # The player's UDP setting, 0 = restricted, 1 = public
     ]
 
@@ -285,11 +285,11 @@ class CarTelemetryData(ctypes.LittleEndianStructure):
         ('m_brake', ctypes.c_float),                         # Amount of brake applied (0 to 100)
         ('m_clutch', ctypes.c_uint8),                        # Amount of clutch applied (0 to 100)
         ('m_gear', ctypes.c_int8),                           # Gear selected (1-8, N=0, R=-1)
-        ('m_engineRPM', ctypes.uint16),                      # Engine RPM
+        ('m_engineRPM', ctypes.c_uint16),                      # Engine RPM
         ('m_drs', ctypes.c_uint8),                           # 0 = off, 1 = on
         ('m_revLightsPercent', ctypes.c_uint8),              # Rev lights indicator (percentage)
         ('m_brakesTemperature', ctypes.c_uint16 * 4),        # Brakes temperature (celsius)
-        ('m_tyresSurfaceTemperature', ctypes.uint16 * 4),    # Tyres surface temperature (celsius)
+        ('m_tyresSurfaceTemperature', ctypes.c_uint16 * 4),    # Tyres surface temperature (celsius)
         ('m_tyresInnerTemperature', ctypes.c_uint16 * 4),    # Tyres inner temperature (celsius)
         ('m_engineTemperature', ctypes.c_uint16),            # Engine temperature (celsius)
         ('m_tyresPressure', ctypes.c_float * 4),             # Tyres pressure (PSI)
@@ -327,20 +327,20 @@ class CarStatusData(ctypes.LittleEndianStructure):
         ('m_fuelInTank', ctypes.c_float),               # Current fuel mass
         ('m_fuelCapacity', ctypes.c_float),             # Fuel capacity
         ('m_fuelRemainingLaps', ctypes.c_float),        # Fuel remaining in terms of laps (value on MFD)
-        ('m_maxRPM', ctypes.uint16),                    # Cars max RPM, point of rev limiter
-        ('m_idleRPM', ctypes.uint16),                   # Cars idle RPM
+        ('m_maxRPM', ctypes.c_uint16),                    # Cars max RPM, point of rev limiter
+        ('m_idleRPM', ctypes.c_uint16),                   # Cars idle RPM
         ('m_maxGears', ctypes.c_uint8),                 # Maximum number of gears
         ('m_drsAllowed', ctypes.c_uint8),               # 0 = not allowed, 1 = allowed, -1 = unknown
         ('m_tyresWear', ctypes.c_uint8 * 4),            # Tyre wear percentage
         ('m_actualTyreCompound', ctypes.c_uint8),       # F1 Modern - 16 = C5, 17 = C4, 18 = C3, 19 = C2, 20 = C1
    					                                    # 7 = inter, 8 = wet
    					                                    # F1 Classic - 9 = dry, 10 = wet
-   					                                    # F2 – 11 = super soft, 12 = soft, 13 = medium, 14 = hard
+   					                                    # F2 - 11 = super soft, 12 = soft, 13 = medium, 14 = hard
    					                                    # 15 = wet
         ('m_tyreVisualCompound', ctypes.c_uint8),       # F1 visual (can be different from actual compound
                                                         # 16 = soft, 17 = medium, 18 = hard, 7 = inter, 8 = wet
-                                                        # F1 Classic – same as above
-                                                        # F2 – same as above
+                                                        # F1 Classic - same as above
+                                                        # F2 - same as above
         ('m_tyresDamage', ctypes.c_uint8 * 4),          # Tyre damage (percentage)
         ('m_frontLeftWingDamage', ctypes.c_uint8),      # Front left wing damage (percentage)
         ('m_frontRightWingDamage', ctypes.c_uint8),     # Front right wing damage (percentage)
