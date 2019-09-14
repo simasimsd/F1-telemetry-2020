@@ -1,7 +1,7 @@
 import socket
 from f1_telemetry.f1_2019_struct import *
 
-UDP_IP = "127.0.0.1"
+UDP_IP = "0.0.0.0"
 UDP_PORT = 20777
 
 
@@ -15,10 +15,10 @@ def get_telemetry():
                          socket.SOCK_DGRAM)
     sock.bind((UDP_IP, UDP_PORT))
     while True:
-        data, _ = sock.recvfrom(1343)
-        m_header = Header.from_buffer_copy(data[0:21])
+        data, _ = sock.recvfrom(1347)
+        m_header = Header.from_buffer_copy(data[0:23])
         if int(m_header.m_packetId) == 0:
-            packet = PacketMotionData.from_buffer_copy(data[0:1343])
+            packet = PacketMotionData.from_buffer_copy(data[0:1347])
 
         elif int(m_header.m_packetId) == 1:
             packet = PacketSessionData.from_buffer_copy(data[0:149])
