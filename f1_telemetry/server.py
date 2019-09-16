@@ -4,7 +4,6 @@ from f1_telemetry.f1_2019_struct import *
 UDP_IP = "0.0.0.0"
 UDP_PORT = 20777
 
-
 def get_telemetry():
     """
     Generator function which yields UDPPackets from the specified ip address and port
@@ -18,7 +17,7 @@ def get_telemetry():
         data, _ = sock.recvfrom(1347)
         m_header = Header.from_buffer_copy(data[0:23])
         if int(m_header.m_packetId) == 0:
-            packet = PacketMotionData.from_buffer_copy(data[0:1347])
+            packet = PacketMotionData.from_buffer_copy(data[0:1343])
 
         elif int(m_header.m_packetId) == 1:
             packet = PacketSessionData.from_buffer_copy(data[0:149])
