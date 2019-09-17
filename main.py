@@ -1,4 +1,5 @@
 from f1_telemetry.server import get_telemetry
+import time
 
 if __name__ == '__main__':
     print("Server started on 20777")
@@ -10,7 +11,7 @@ if __name__ == '__main__':
                   "Weather:", packet.m_weather,
                   "Track Temp: ", packet.m_trackTemperature,
                   "Air Temp: ", packet.m_airTemperature,
-                  "Total Laps: ", packet.m_totalLaps)
+                  "Total Laps: ", packet.m_totalLaps, time.time())
             print("Test Lap:", packet.m_lastLapTime, packet.m_currentLapTime,
                   packet.m_bestLapTime, packet.m_sector1Time,
                   packet.m_sector2Time, packet.m_lapDistance,
