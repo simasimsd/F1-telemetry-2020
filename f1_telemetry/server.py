@@ -39,4 +39,5 @@ def get_telemetry():
 
         elif int(m_header.m_packetId) == 7:
             packet = PacketCarStatusData.from_buffer_copy(data[0:1143])
+
         yield packet
