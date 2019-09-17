@@ -13,6 +13,7 @@ def get_telemetry():
     sock = socket.socket(socket.AF_INET,
                          socket.SOCK_DGRAM)
     sock.bind((UDP_IP, UDP_PORT))
+
     while True:
         data, _ = sock.recvfrom(1347)
         m_header = Header.from_buffer_copy(data[0:23])
