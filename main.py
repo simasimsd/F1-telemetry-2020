@@ -36,12 +36,35 @@ if __name__ == '__main__':
         #elif theader == 3:
             #print(dir(packet.m_eventStringCode))
             #print(theader, "Event ID: ", packet.m_eventStringCode._type_)
-        #elif theader == 4:
-            #print(theader, "Active Cars: ", packet.m_numActiveCars)
-            #print(theader, "Test Teams:", packet.m_aiControlled,
-            #      packet.m_driverId,
-            #      packet.m_teamId, packet.m_raceNumber,
-            #      packet.m_nationality, packet.m_name,
-            #      packet.m_yourTelemetry)
-        #elif theader == 5:
-        #    print(packet)
+        elif theader == 4:
+            #print("ID: ", theader)
+            for participantdata in packet.m_participants:
+                print(theader, "Active Cars: ", packet.m_numActiveCars,
+                      "AI Car?: ", participantdata.m_aiControlled,
+                      "Driver: ", participantdata.m_driverId,
+                      "Team: ", participantdata.m_teamId,
+                      "Race Number: ", participantdata.m_raceNumber,
+                      "Nationality: ", participantdata.m_nationality,
+                      "Player Name", participantdata.m_name)
+        elif theader == 5:
+            for setupdata in packet.m_carSetups:
+                print(theader, "Front Wing: ", setupdata.m_frontWing,
+                      "Rear Wing: ", setupdata.m_rearWing,
+                      "Differential on throttle: ", setupdata.m_onThrottle,
+                      "Differential off throttle: ", setupdata.m_offThrottle,
+                      "Front camber: ", setupdata.m_frontCamber,
+                      "Rear camber: ", setupdata.m_rearCamber,
+                      "Front toe: ", setupdata.m_frontToe,
+                      "Rear toe: ", setupdata.m_rearToe,
+                      "Front suspension: ", setupdata.m_frontSuspension,
+                      "Rear suspension: ", setupdata.m_rearSuspension,
+                      "Front bar: ", setupdata.m_frontAntiRollBar,
+                      "Rear bar: ", setupdata.m_rearAntiRollBar,
+                      "Front height: ", setupdata.m_frontSuspensionHeight,
+                      "Rear height: ", setupdata.m_rearSuspensionHeight,
+                      "Brake pressure (%): ", setupdata.m_brakePressure,
+                      "Brake bias (%): ", setupdata.m_brakeBias,
+                      "Front Tyre (PSI): ", setupdata.m_frontTyrePressure,
+                      "Rear tyre (PSI): ", setupdata.m_rearTyrePressure,
+                      "Ballast: ", setupdata.m_ballast,
+                      "Fuel Load: ", setupdata.m_fuelLoad)

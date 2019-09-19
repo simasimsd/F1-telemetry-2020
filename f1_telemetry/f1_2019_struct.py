@@ -265,8 +265,7 @@ class PacketCarSetupData(ctypes.LittleEndianStructure):
     _pack_ = 1
     _fields_ = [
         ('m_header', Header),  # Header
-#       ('m_numCars', ctypes.c_uint8),
-        ('m_carSetups', CarSetupData * 20),
+        ('m_carSetups', CarSetupData * 20)
     ]
 
 
