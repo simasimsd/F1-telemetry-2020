@@ -1,12 +1,15 @@
 from f1_telemetry.server import get_telemetry
-#from f1_telemetry.f1_2019_struct import *
 import time
 
 if __name__ == '__main__':
     print("Server started on 20777")
-    for packet, theader, madonna in get_telemetry():
+    for packet, theader, mad, player in get_telemetry():
         #print(theader, packet)
-        if theader == 1:
+        if theader == 0:
+            print(theader, packet.m_wheelSpeed[0], packet.m_wheelSpeed[1],
+                  packet.m_wheelSpeed[2], packet.m_wheelSpeed[3])
+
+        elif theader == 1:
             print(theader, "Track: ", packet.m_trackId,
                   "Car Type: ", packet.m_formula,
                   "Safety Car: ", packet.m_safetyCarStatus,
@@ -16,21 +19,25 @@ if __name__ == '__main__':
                   "Total Laps: ", packet.m_totalLaps, time.time())
 
         elif theader == 2:
-            print("Header ID: ", theader)
-            #print(dir(madonna))
-            #print(dir(packet.m_lapsData))
-            #print(packet.m_lapsData.__dict__)
-            #print(theader, "Test Lap:", #packet.m_lastLapTime,
-                  #packet.m_currentLapTime,
-                  #packet.m_bestLapTime, packet.m_sector1Time,
-                  #packet.m_sector2Time, packet.m_lapDistance,
-                  #packet.m_totalDistance,
-            #      packet.m_lapsData)
-        elif theader == 3:
-            print(dir(packet.m_eventStringCode))
-            print(theader, "Event ID: ", packet.m_eventStringCode._type_)
-        elif theader == 4:
-            print(theader, "Active Cars: ", packet.m_numActiveCars)
+            #print(dir(mad)
+            for lapdata in packet.m_lapsData:
+                #print(dir(lapdata))
+                print(theader, "Driver: ", player, "Last LapTime:", lapdata.m_lastLapTime,
+                      "Current LapTime: ", lapdata.m_currentLapTime,
+                      "Best LapTime: ", lapdata.m_bestLapTime,
+                      "T1 Time: ", lapdata.m_sector1Time,
+                      "T2 Time: ", lapdata.m_sector2Time,
+                      "Sector: ", lapdata.m_sector,
+                      "Car position: ", lapdata.m_carPosition,
+                      "Current Lap Numb: ", lapdata.m_currentLapNum,
+                      "Lap Distance: ", lapdata.m_lapDistance,
+                      "Total Lap Distance: ", lapdata.m_totalDistance)
+
+        #elif theader == 3:
+            #print(dir(packet.m_eventStringCode))
+            #print(theader, "Event ID: ", packet.m_eventStringCode._type_)
+        #elif theader == 4:
+            #print(theader, "Active Cars: ", packet.m_numActiveCars)
             #print(theader, "Test Teams:", packet.m_aiControlled,
             #      packet.m_driverId,
             #      packet.m_teamId, packet.m_raceNumber,

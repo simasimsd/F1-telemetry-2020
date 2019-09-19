@@ -19,7 +19,8 @@ def get_telemetry():
     while True:
         data, _ = sock.recvfrom(1347)
         m_header = Header.from_buffer_copy(data[0:23])
-        mad = 50
+        mad = 0
+        player = 0
         if int(m_header.m_packetId) == 0:
             packet = PacketMotionData.from_buffer_copy(data[0:1343])
             theader = int(m_header.m_packetId)
@@ -31,6 +32,7 @@ def get_telemetry():
         elif int(m_header.m_packetId) == 2:
             packet = PacketLapData.from_buffer_copy(data[0:843])
             theader = int(m_header.m_packetId)
+            player = int(m_header.m_playerCarIndex)
             #mad = PacketLapData.from_buffer_copy(data[0:843])
 
         elif int(m_header.m_packetId) == 3:
@@ -54,4 +56,4 @@ def get_telemetry():
             packet = PacketCarStatusData.from_buffer_copy(data[0:1143])
             theader = int(m_header.m_packetId)
 
-        yield packet, theader, mad
+        yield packet, theader, mad, player
