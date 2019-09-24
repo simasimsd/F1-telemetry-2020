@@ -5,7 +5,7 @@ dst_ip = "192.168.1.108"
 infile = "f12019-test.pcap"
 
 
-def my_send(rd, count=400000):
+def my_send(rd, count=40000):
     pkt_cnt = 0
     p_out = []
 

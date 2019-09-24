@@ -11,6 +11,9 @@ If you want to test it without running the game, you can replay a previously
 recorded session captured with wireshark or tcpdump and use send-pcap.py to send
 the UDP packets.
 
+A sample file can be found here:
+http://nx.fastnetserv.cloud/index.php/s/B5dtZ4W9zZRLK6r
+
 ### Usage
 Configure the following parameters inside send-pcap.py
 ```
