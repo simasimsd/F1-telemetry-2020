@@ -11,7 +11,7 @@ from model.f1_2020_struct import *
 class F1UdpReceiver(asyncio.DatagramProtocol):
     def __init__(self):
         super().__init__()
-        self.es = Elasticsearch("http://elasticsearch:9200")
+        self.es = Elasticsearch("http://es01:9200")
         self.participant_name = {}
 
     def connection_made(self, transport):
