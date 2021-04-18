@@ -1,6 +1,5 @@
 import asyncio
 import logging
-import time
 from datetime import datetime
 from decimal import Decimal
 
@@ -12,12 +11,13 @@ from model.f1_2020_struct import *
 class F1UdpReceiver(asyncio.DatagramProtocol):
     def __init__(self):
         super().__init__()
+        self.es = Elasticsearch("http://elasticsearch:9200")
+        self.participant_name = {}
 
     def connection_made(self, transport):
         self.transport = transport
 
     def datagram_received(self, data, addr):
-        es = Elasticsearch("http://elasticsearch:9200")
         header = PacketHeader.from_buffer_copy(data[0:24])
         if int(header.packetId) == 1:
             packet = PacketSessionData_V1.from_buffer_copy(data[0:251])
@@ -36,7 +36,7 @@ class F1UdpReceiver(asyncio.DatagramProtocol):
                 "track_length": packet.trackLength,
             }
             data["name"] = f"{data['track']} - {data['type']} - {data['weather']} - {datetime.utcnow().isoformat()}"
-            es.index(index="f1", body=data, request_timeout=30)
+            self.es.index(index="f1", body=data, request_timeout=30)
 
         elif int(header.packetId) == 2:
             packet = PacketLapData_V1.from_buffer_copy(data[0:1190])
@@ -48,6 +48,7 @@ class F1UdpReceiver(asyncio.DatagramProtocol):
                 "session_time": header.sessionTime,
                 "frame_id": header.frameIdentifier,
                 "player_index": header.playerCarIndex,
+                "player_name": self.participant_name[header.playerCarIndex],
                 "lap_uuid": f"{header.sessionUID}-{header.playerCarIndex}-{header.frameIdentifier}",
                 "last_lap_time": Decimal(packet.lapData[header.playerCarIndex].lastLapTime),
                 "current_lap_time": Decimal(packet.lapData[header.playerCarIndex].currentLapTime),
@@ -66,7 +67,13 @@ class F1UdpReceiver(asyncio.DatagramProtocol):
                 "driver_status": packet.lapData[header.playerCarIndex].driverStatus,
                 "result_status": packet.lapData[header.playerCarIndex].resultStatus
             }
-            es.index(index="f1", body=data, request_timeout=30)
+            self.es.index(index="f1", body=data, request_timeout=30)
+
+        elif int(header.packetId) == 4 and header.frameIdentifier == 0:
+            self.participant_name = {}
+            packet = PacketParticipantsData_V1.from_buffer_copy(data[0:1213])
+            for index, participant in enumerate(packet.participants):
+                self.participant_name[index] = participant.name.decode("utf-8")
 
         elif int(header.packetId) == 6:
             packet = PacketCarTelemetryData_V1.from_buffer_copy(data[0:1307])
@@ -78,6 +85,7 @@ class F1UdpReceiver(asyncio.DatagramProtocol):
                 "session_time": header.sessionTime,
                 "frame_id": header.frameIdentifier,
                 "player_index": header.playerCarIndex,
+                "player_name": self.participant_name[header.playerCarIndex],
                 "speed": packet.carTelemetryData[header.playerCarIndex].speed,
                 "throttle": packet.carTelemetryData[header.playerCarIndex].throttle,
                 "steering": packet.carTelemetryData[header.playerCarIndex].steer,
@@ -109,7 +117,7 @@ class F1UdpReceiver(asyncio.DatagramProtocol):
                 "RL_tyre_surface": packet.carTelemetryData[header.playerCarIndex].surfaceType[2],
                 "RR_tyre_surface": packet.carTelemetryData[header.playerCarIndex].surfaceType[3]
             }
-            es.index(index="f1", body=data, request_timeout=30)
+            self.es.index(index="f1", body=data, request_timeout=30)
 
         elif int(header.packetId) == 8:
             packet = PacketFinalClassificationData_V1.from_buffer_copy(data[0:839])
@@ -121,6 +129,7 @@ class F1UdpReceiver(asyncio.DatagramProtocol):
                 "session_time": header.sessionTime,
                 "frame_id": header.frameIdentifier,
                 "player_index": header.playerCarIndex,
+                "player_name": self.participant_name[header.playerCarIndex],
                 "position": packet.classificationData[header.playerCarIndex].position,
                 "num_laps": packet.classificationData[header.playerCarIndex].numLaps,
                 "grid_position": packet.classificationData[header.playerCarIndex].gridPosition,
@@ -132,10 +141,10 @@ class F1UdpReceiver(asyncio.DatagramProtocol):
                 "penalties_time": packet.classificationData[header.playerCarIndex].penaltiesTime,
                 "num_penalties": packet.classificationData[header.playerCarIndex].numPenalties,
                 "num_tyre_stints": packet.classificationData[header.playerCarIndex].numTyreStints,
-                "tyre_stints_actual": packet.classificationData[header.playerCarIndex].tyreStintsActual,
-                "tyre_stints_visual": packet.classificationData[header.playerCarIndex].tyreStintsVisual,
+                # "tyre_stints_actual": packet.classificationData[header.playerCarIndex].tyreStintsActual,
+                # "tyre_stints_visual": packet.classificationData[header.playerCarIndex].tyreStintsVisual,
             }
-            es.index(index="f1", body=data, request_timeout=30)
+            self.es.index(index="f1", body=data, request_timeout=30)
 
 
 if __name__ == "__main__":

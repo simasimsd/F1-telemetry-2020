@@ -1,0 +1,29 @@
+version: '3.7'
+services:
+  udp_ingester:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 20777:20777/udp
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.12.0
+    ports:
+      - 5601:5601
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.12.0
+    environment:
+      - bootstrap.memory_lock=true
+      - discovery.type=single-node
+      - cluster.routing.allocation.disk.threshold_enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
